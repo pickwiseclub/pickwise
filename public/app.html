@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PickWise - Product Comparison</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50">
+    <div class="max-w-7xl mx-auto p-6">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-slate-900 mb-2">PickWise</h1>
+            <p class="text-slate-600">Compare products. Decide smarter.</p>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                    <span class="text-sm font-medium text-slate-700 w-24">Product A</span>
+                    <input type="url" id="url1" placeholder="https://example.com/product" class="flex-1 px-4 py-2 border border-slate-300 rounded-lg">
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-sm font-medium text-slate-700 w-24">Product B</span>
+                    <input type="url" id="url2" placeholder="https://example.com/product" class="flex-1 px-4 py-2 border border-slate-300 rounded-lg">
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-sm font-medium text-slate-700 w-24">Product C</span>
+                    <input type="url" id="url3" placeholder="https://example.com/product" class="flex-1 px-4 py-2 border border-slate-300 rounded-lg">
+                </div>
+            </div>
+
+            <button onclick="compareProducts()" id="compareBtn" class="mt-6 w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700">
+                Compare Products
+            </button>
+
+            <div id="error" class="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg hidden">
+                <p class="text-red-700 text-sm"></p>
+            </div>
+        </div>
+
+        <div id="results" class="hidden bg-white rounded-lg shadow-md p-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="productsGrid"></div>
+        </div>
+    </div>
+
+    <script>
+        async function compareProducts() {
+            const url1 = document.getElementById('url1').value.trim();
+            const url2 = document.getElementById('url2').value.trim();
+            const url3 = document.getElementById('url3').value.trim();
+            const urls = [url1, url2, url3].filter(u => u);
+
+            if (urls.length < 2) {
+                showError('Please enter at least 2 product URLs');
+                return;
+            }
+
+            document.getElementById('error').classList.add('hidden');
+            document.getElementById('compareBtn').disabled = true;
+            document.getElementById('compareBtn').innerText = 'Comparing...';
+
+            try {
+                const results = [];
+                for (const url of urls) {
+                    try {
+                        const response = await fetch('/api/compare', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ url })
+                        });
+                        const data = await response.json();
+                        results.push(data);
+                    } catch (err) {
+                        results.push({ url, title: 'Error', price: 'N/A', rawPrice: null, error: true });
+                    }
+                }
+
+                displayResults(results);
+            } catch (err) {
+                showError('Comparison failed. Please try again.');
+            } finally {
+                document.getElementById('compareBtn').disabled = false;
+                document.getElementById('compareBtn').innerText = 'Compare Products';
+            }
+        }
+
+        function showError(msg) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.querySelector('p').innerText = msg;
+            errorDiv.classList.remove('hidden');
+        }
+
+        function displayResults(products) {
+            const bestPrice = Math.min(...products.filter(p => p.rawPrice).map(p => p.rawPrice));
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = '';
+
+            products.forEach((p, i) => {
+                const isBest = p.rawPrice === bestPrice && bestPrice;
+                const card = `
+                    <div class="border-2 rounded-lg p-5 ${p.error ? 'border-red-300' : 'border-slate-200'}">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
+                                PRODUCT ${String.fromCharCode(65 + i)}
+                            </span>
+                            <a href="${p.url}" target="_blank" class="text-blue-600">🔗</a>
+                        </div>
+                        <h3 class="text-lg font-semibold text-slate-900 mb-4">${p.title}</h3>
+                        <div class="mb-4">
+                            <div class="text-sm font-medium text-slate-600 mb-1">Price</div>
+                            <div class="text-2xl font-bold ${isBest ? 'text-green-600' : 'text-slate-900'}">
+                                ${p.price !== 'N/A' ? '$' + p.price : 'N/A'}
+                                ${isBest ? '<span class="ml-2 text-xs text-green-600 bg-green-50 px-2 py-1 rounded">BEST</span>' : ''}
+                            </div>
+                        </div>
+                        ${p.rating ? `<div class="mb-4"><div class="text-sm font-medium text-slate-600 mb-1">Rating</div><div class="text-lg font-semibold">${p.rating} / 5</div></div>` : ''}
+                        <div class="mb-4">
+                            <div class="text-sm font-medium text-slate-600 mb-1">Availability</div>
+                            <div class="text-sm text-slate-700">${p.availability}</div>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += card;
+            });
+
+            document.getElementById('results').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

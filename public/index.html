@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PickWise - Compare products instantly and make smarter shopping decisions. Real-time price, rating, and feature comparisons across any shopping site.">
+    <meta name="keywords" content="product comparison, price comparison, shopping tool, compare products, best deals">
+    <meta property="og:title" content="PickWise - Smart Product Comparisons">
+    <meta property="og:description" content="Stop overthinking purchases. Compare products instantly with real-time data.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://pickwise.club">
+    <title>PickWise - Compare Products, Decide Smarter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .card-hover {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+</head>
+<body class="bg-slate-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                    </svg>
+                    <span class="text-2xl font-bold text-slate-900">PickWise</span>
+                </div>
+                <a href="#app" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                    Start Comparing
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-purple-50 py-20 sm:py-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto">
+                <h1 class="text-5xl sm:text-6xl font-bold text-slate-900 mb-6 leading-tight">
+                    Stop Overthinking.<br/>
+                    <span class="gradient-text">Start Picking.</span>
+                </h1>
+                <p class="text-xl text-slate-600 mb-8 leading-relaxed">
+                    Compare any products from any site instantly. Real-time prices, ratings, and specs—side by side. Make confident purchase decisions in seconds, not hours.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="#app" class="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-blue-700 transition-colors shadow-lg">
+                        Compare Products Now
+                    </a>
+                    <a href="#how-it-works" class="bg-white text-slate-700 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-slate-50 transition-colors border-2 border-slate-200">
+                        See How It Works
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Statement -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
+                    Decision Fatigue Is Real
+                </h2>
+                <p class="text-lg text-slate-600">
+                    You open 15 tabs. Compare prices. Read reviews. Check specs. Three hours later, you're still undecided. There's a better way.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="py-20 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
+                    Three Steps to Clarity
+                </h2>
+                <p class="text-lg text-slate-600">
+                    No registration. No setup. Just paste URLs and get answers.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-xl p-8 shadow-sm card-hover">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                        <span class="text-2xl font-bold text-blue-600">1</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-slate-900 mb-3">Paste Product URLs</h3>
+                    <p class="text-slate-600">
+                        Copy links from Amazon, eBay, specialty retailers—any shopping site. Paste 2-3 products you're considering.
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-xl p-8 shadow-sm card-hover">
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                        <span class="text-2xl font-bold text-purple-600">2</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-slate-900 mb-3">We Extract the Data</h3>
+                    <p class="text-slate-600">
+                        Our engine pulls prices, ratings, specs, and availability in real-time. No manual entry required.
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-xl p-8 shadow-sm card-hover">
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+                        <span class="text-2xl font-bold text-green-600">3</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-slate-900 mb-3">Get Your Answer</h3>
+                    <p class="text-slate-600">
+                        Side-by-side comparison shows the winner. Best price, highest rating, best value—highlighted instantly.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
+                    Built for Fast Decisions
+                </h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-slate-900 mb-2">Real-Time Data</h3>
+                    <p class="text-slate-600 text-sm">Live prices and availability—no stale cached results</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-slate-900 mb-2">Any Site</h3>
+                    <p class="text-slate-600 text-sm">Works across all major retailers and specialty stores</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-slate-900 mb-2">Clear Winner</h3>
+                    <p class="text-slate-600 text-sm">Best price and rating automatically highlighted</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-slate-900 mb-2">Private</h3>
+                    <p class="text-slate-600 text-sm">No account required. No data stored. Just results.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases -->
+    <section class="py-20 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
+                    Perfect For Every Purchase
+                </h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold text-slate-900 mb-3">Electronics</h3>
+                    <p class="text-slate-600 text-sm">Compare laptops, phones, cameras—specs and prices side by side</p>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold text-slate-900 mb-3">Home Goods</h3>
+                    <p class="text-slate-600 text-sm">Find the best deals on furniture, appliances, and decor</p>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold text-slate-900 mb-3">Investments</h3>
+                    <p class="text-slate-600 text-sm">Compare precious metals, collectibles, and asset pricing</p>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold text-slate-900 mb-3">Fashion</h3>
+                    <p class="text-slate-600 text-sm">Check prices and reviews across different retailers</p>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold text-slate-900 mb-3">Beauty</h3>
+                    <p class="text-slate-600 text-sm">Compare skincare, cosmetics, and wellness products</p>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="text-lg font-semibold text-slate-900 mb-3">Anything Else</h3>
+                    <p class="text-slate-600 text-sm">If it's sold online, PickWise can compare it</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="app" class="py-20 bg-gradient-to-br from-blue-600 to-purple-600">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl sm:text-5xl font-bold text-white mb-6">
+                Ready to Decide Smarter?
+            </h2>
+            <p class="text-xl text-blue-100 mb-8">
+                Stop wasting time on comparison paralysis. Get clear answers in seconds.
+            </p>
+            <a href="/app" class="inline-block bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-blue-50 transition-colors shadow-xl">
+                Launch PickWise App
+            </a>
+            <p class="text-blue-100 text-sm mt-6">
+                No signup required • Free to use • Works with any site
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center gap-2 mb-4 md:mb-0">
+                    <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                    </svg>
+                    <span class="text-lg font-bold text-white">PickWise</span>
+                </div>
+                <div class="text-center md:text-right">
+                    <p class="text-sm">&copy; 2025 PickWise. Smart product comparisons.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
