@@ -1,0 +1,11 @@
+{
+  "name": "pickwise",
+  "version": "1.0.0",
+  "description": "PickWise - Smart Product Comparisons",
+  "scripts": {
+    "build": "echo 'Static site - no build needed'",
+    "start": "echo 'Static site'"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

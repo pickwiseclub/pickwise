@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "public": true,
+  "routes": [
+    {
+      "src": "/app",
+      "dest": "/public/app.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/$1"
+    }
+  ]
+}
