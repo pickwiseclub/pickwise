@@ -1,53 +1,186 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PickWise - Product Comparison</title>
+    <title>PickWise - Smart Product Comparison</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-50">
     <div class="max-w-7xl mx-auto p-6">
+        <!-- Header -->
         <div class="text-center mb-8">
             <h1 class="text-4xl font-bold text-slate-900 mb-2">PickWise</h1>
-            <p class="text-slate-600">Compare products. Decide smarter.</p>
+            <p class="text-slate-600">Compare products. Discover better prices. Decide smarter.</p>
         </div>
 
-        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-            <div class="space-y-4">
-                <div class="flex items-center gap-3">
-                    <span class="text-sm font-medium text-slate-700 w-24">Product A</span>
-                    <input type="url" id="url1" placeholder="https://example.com/product" class="flex-1 px-4 py-2 border border-slate-300 rounded-lg">
-                </div>
-                <div class="flex items-center gap-3">
-                    <span class="text-sm font-medium text-slate-700 w-24">Product B</span>
-                    <input type="url" id="url2" placeholder="https://example.com/product" class="flex-1 px-4 py-2 border border-slate-300 rounded-lg">
-                </div>
-                <div class="flex items-center gap-3">
-                    <span class="text-sm font-medium text-slate-700 w-24">Product C</span>
-                    <input type="url" id="url3" placeholder="https://example.com/product" class="flex-1 px-4 py-2 border border-slate-300 rounded-lg">
-                </div>
-            </div>
-
-            <button onclick="compareProducts()" id="compareBtn" class="mt-6 w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700">
-                Compare Products
-            </button>
-
-            <div id="error" class="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg hidden">
-                <p class="text-red-700 text-sm"></p>
+        <!-- Mode Selector -->
+        <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+            <div class="flex gap-2 justify-center">
+                <button onclick="switchMode('manual')" id="manualBtn" class="px-6 py-3 rounded-lg font-medium transition-colors bg-blue-600 text-white">
+                    Manual Compare
+                </button>
+                <button onclick="switchMode('ai')" id="aiBtn" class="px-6 py-3 rounded-lg font-medium transition-colors bg-slate-200 text-slate-700 hover:bg-slate-300">
+                    AI Price Finder
+                </button>
+                <button onclick="switchMode('hybrid')" id="hybridBtn" class="px-6 py-3 rounded-lg font-medium transition-colors bg-slate-200 text-slate-700 hover:bg-slate-300">
+                    Hybrid Mode
+                </button>
             </div>
         </div>
 
-        <div id="results" class="hidden bg-white rounded-lg shadow-md p-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="productsGrid"></div>
+        <!-- Manual Compare Mode -->
+        <div id="manualMode" class="mode-panel">
+            <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                <h2 class="text-xl font-semibold text-slate-900 mb-4">Compare Products Side-by-Side</h2>
+                <p class="text-slate-600 text-sm mb-6">Paste 2-3 product URLs to compare prices, ratings, and specs</p>
+                
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <span class="text-sm font-medium text-slate-700 w-24">Product A</span>
+                        <input type="url" id="manualUrl1" placeholder="https://example.com/product" class="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-sm font-medium text-slate-700 w-24">Product B</span>
+                        <input type="url" id="manualUrl2" placeholder="https://example.com/product" class="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-sm font-medium text-slate-700 w-24">Product C</span>
+                        <input type="url" id="manualUrl3" placeholder="https://example.com/product (optional)" class="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <button onclick="manualCompare()" id="manualCompareBtn" class="mt-6 w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                    Compare Products
+                </button>
+            </div>
+        </div>
+
+        <!-- AI Price Finder Mode -->
+        <div id="aiMode" class="mode-panel hidden">
+            <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                <h2 class="text-xl font-semibold text-slate-900 mb-4">Find Better Prices Automatically</h2>
+                <p class="text-slate-600 text-sm mb-6">Paste one product URL and AI will search for better prices across major retailers</p>
+                
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="text-sm font-medium text-slate-700 w-24">Product URL</span>
+                    <input type="url" id="aiUrl" placeholder="https://example.com/product" class="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                </div>
+
+                <button onclick="findDeals()" id="findDealsBtn" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-colors">
+                    🤖 Find Better Prices with AI
+                </button>
+            </div>
+        </div>
+
+        <!-- Hybrid Mode -->
+        <div id="hybridMode" class="mode-panel hidden">
+            <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                <h2 class="text-xl font-semibold text-slate-900 mb-4">Hybrid Comparison</h2>
+                <p class="text-slate-600 text-sm mb-6">Start with your URLs, then let AI find additional options</p>
+                
+                <div class="space-y-4 mb-4">
+                    <div class="flex items-center gap-3">
+                        <span class="text-sm font-medium text-slate-700 w-32">Your Product</span>
+                        <input type="url" id="hybridUrl1" placeholder="https://example.com/product" class="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-sm font-medium text-slate-700 w-32">Compare To</span>
+                        <input type="url" id="hybridUrl2" placeholder="https://example.com/product (optional)" class="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 mb-6 p-4 bg-purple-50 rounded-lg">
+                    <input type="checkbox" id="hybridAi" checked class="w-5 h-5 text-purple-600">
+                    <label for="hybridAi" class="text-sm font-medium text-slate-700">Let AI find additional options automatically</label>
+                </div>
+
+                <button onclick="hybridCompare()" id="hybridCompareBtn" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-colors">
+                    Compare & Discover
+                </button>
+            </div>
+        </div>
+
+        <!-- Error Display -->
+        <div id="error" class="hidden bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+            <p class="text-red-700 text-sm"></p>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading" class="hidden bg-white rounded-lg shadow-md p-8 mb-6">
+            <div class="flex flex-col items-center">
+                <div class="animate-spin h-12 w-12 border-4 border-blue-600 border-t-transparent rounded-full mb-4"></div>
+                <p class="text-slate-700 font-medium" id="loadingText">Analyzing products...</p>
+            </div>
+        </div>
+
+        <!-- Results Display -->
+        <div id="results" class="hidden">
+            <!-- Savings Banner -->
+            <div id="savingsBanner" class="hidden bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg shadow-md p-6 mb-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-1">💰 Better Prices Found!</h3>
+                        <p class="text-green-100">Save up to <span id="maxSavings" class="font-bold text-white"></span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-xl font-semibold text-slate-900 mb-6">Comparison Results</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="productsGrid"></div>
+            </div>
         </div>
     </div>
 
     <script>
-        async function compareProducts() {
-            const url1 = document.getElementById('url1').value.trim();
-            const url2 = document.getElementById('url2').value.trim();
-            const url3 = document.getElementById('url3').value.trim();
+        let currentMode = 'manual';
+
+        function switchMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-panel').forEach(el => el.classList.add('hidden'));
+            document.getElementById(mode + 'Mode').classList.remove('hidden');
+            
+            // Update button styles
+            ['manual', 'ai', 'hybrid'].forEach(m => {
+                const btn = document.getElementById(m + 'Btn');
+                if (m === mode) {
+                    btn.className = 'px-6 py-3 rounded-lg font-medium transition-colors bg-blue-600 text-white';
+                } else {
+                    btn.className = 'px-6 py-3 rounded-lg font-medium transition-colors bg-slate-200 text-slate-700 hover:bg-slate-300';
+                }
+            });
+
+            hideResults();
+        }
+
+        function showError(msg) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.querySelector('p').innerText = msg;
+            errorDiv.classList.remove('hidden');
+            setTimeout(() => errorDiv.classList.add('hidden'), 5000);
+        }
+
+        function showLoading(text) {
+            document.getElementById('loadingText').innerText = text;
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('results').classList.add('hidden');
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').classList.add('hidden');
+        }
+
+        function hideResults() {
+            document.getElementById('results').classList.add('hidden');
+            document.getElementById('savingsBanner').classList.add('hidden');
+        }
+
+        async function manualCompare() {
+            const url1 = document.getElementById('manualUrl1').value.trim();
+            const url2 = document.getElementById('manualUrl2').value.trim();
+            const url3 = document.getElementById('manualUrl3').value.trim();
             const urls = [url1, url2, url3].filter(u => u);
 
             if (urls.length < 2) {
@@ -55,69 +188,198 @@
                 return;
             }
 
-            document.getElementById('error').classList.add('hidden');
-            document.getElementById('compareBtn').disabled = true;
-            document.getElementById('compareBtn').innerText = 'Comparing...';
-
+            showLoading('Comparing products...');
+            
             try {
                 const results = [];
                 for (const url of urls) {
-                    try {
-                        const response = await fetch('/api/compare', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ url })
-                        });
-                        const data = await response.json();
-                        results.push(data);
-                    } catch (err) {
-                        results.push({ url, title: 'Error', price: 'N/A', rawPrice: null, error: true });
-                    }
+                    const response = await fetch('/api/compare', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ url })
+                    });
+                    const data = await response.json();
+                    results.push(data);
                 }
 
                 displayResults(results);
             } catch (err) {
                 showError('Comparison failed. Please try again.');
             } finally {
-                document.getElementById('compareBtn').disabled = false;
-                document.getElementById('compareBtn').innerText = 'Compare Products';
+                hideLoading();
             }
         }
 
-        function showError(msg) {
-            const errorDiv = document.getElementById('error');
-            errorDiv.querySelector('p').innerText = msg;
-            errorDiv.classList.remove('hidden');
+        async function findDeals() {
+            const url = document.getElementById('aiUrl').value.trim();
+            if (!url) {
+                showError('Please enter a product URL');
+                return;
+            }
+
+            showLoading('Analyzing product and searching for better prices...');
+
+            try {
+                // First, extract product info
+                const compareResponse = await fetch('/api/compare', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                });
+                const productInfo = await compareResponse.json();
+
+                // Then find alternative sellers
+                const dealsResponse = await fetch('/api/find-deals', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ productInfo })
+                });
+                const dealsData = await dealsResponse.json();
+
+                // Combine original + alternatives
+                const allProducts = [productInfo, ...dealsData.alternatives.map(alt => ({
+                    title: `${productInfo.title} at ${alt.retailer}`,
+                    url: alt.url,
+                    price: alt.price,
+                    rawPrice: alt.rawPrice,
+                    availability: alt.availability,
+                    retailer: alt.retailer,
+                    confidence: alt.confidence,
+                    isAlternative: true
+                }))];
+
+                displayResults(allProducts, dealsData.savingsAvailable);
+            } catch (err) {
+                console.error(err);
+                showError('Price search failed. Please try again.');
+            } finally {
+                hideLoading();
+            }
         }
 
-        function displayResults(products) {
+        async function hybridCompare() {
+            const url1 = document.getElementById('hybridUrl1').value.trim();
+            const url2 = document.getElementById('hybridUrl2').value.trim();
+            const useAi = document.getElementById('hybridAi').checked;
+
+            if (!url1) {
+                showError('Please enter at least one product URL');
+                return;
+            }
+
+            showLoading('Comparing products and discovering deals...');
+
+            try {
+                const results = [];
+                
+                // Get user-provided URLs
+                for (const url of [url1, url2].filter(u => u)) {
+                    const response = await fetch('/api/compare', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ url })
+                    });
+                    const data = await response.json();
+                    results.push(data);
+                }
+
+                // If AI enabled, find alternatives for first product
+                if (useAi && results[0] && results[0].searchTerms) {
+                    const dealsResponse = await fetch('/api/find-deals', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ productInfo: results[0] })
+                    });
+                    const dealsData = await dealsResponse.json();
+
+                    // Add top 2 alternatives
+                    const topAlternatives = dealsData.alternatives.slice(0, 2).map(alt => ({
+                        title: `${results[0].title} at ${alt.retailer}`,
+                        url: alt.url,
+                        price: alt.price,
+                        rawPrice: alt.rawPrice,
+                        availability: alt.availability,
+                        retailer: alt.retailer,
+                        isAlternative: true
+                    }));
+
+                    results.push(...topAlternatives);
+                }
+
+                displayResults(results);
+            } catch (err) {
+                console.error(err);
+                showError('Hybrid comparison failed. Please try again.');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        function displayResults(products, showSavings = false) {
             const bestPrice = Math.min(...products.filter(p => p.rawPrice).map(p => p.rawPrice));
+            const originalPrice = products[0]?.rawPrice;
+            
+            if (showSavings && originalPrice && bestPrice < originalPrice) {
+                const savings = (originalPrice - bestPrice).toFixed(2);
+                const savingsPercent = ((savings / originalPrice) * 100).toFixed(0);
+                document.getElementById('maxSavings').innerText = `$${savings} (${savingsPercent}%)`;
+                document.getElementById('savingsBanner').classList.remove('hidden');
+            }
+
             const grid = document.getElementById('productsGrid');
             grid.innerHTML = '';
 
             products.forEach((p, i) => {
                 const isBest = p.rawPrice === bestPrice && bestPrice;
+                const isOriginal = i === 0;
+                
                 const card = `
-                    <div class="border-2 rounded-lg p-5 ${p.error ? 'border-red-300' : 'border-slate-200'}">
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
-                                PRODUCT ${String.fromCharCode(65 + i)}
-                            </span>
-                            <a href="${p.url}" target="_blank" class="text-blue-600">🔗</a>
+                    <div class="border-2 rounded-lg p-5 transition-all hover:shadow-lg ${
+                        isBest ? 'border-green-500 bg-green-50' : 
+                        p.error ? 'border-red-300 bg-red-50' : 
+                        'border-slate-200'
+                    }">
+                        <div class="flex items-center justify-between mb-3">
+                            ${isOriginal ? 
+                                '<span class="text-xs font-bold text-blue-600 bg-blue-100 px-3 py-1 rounded-full">ORIGINAL</span>' :
+                                p.isAlternative ?
+                                '<span class="text-xs font-bold text-purple-600 bg-purple-100 px-3 py-1 rounded-full">AI FOUND</span>' :
+                                '<span class="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-full">PRODUCT ${String.fromCharCode(65 + i)}</span>'
+                            }
+                            <a href="${p.url}" target="_blank" class="text-blue-600 hover:text-blue-700 text-sm font-medium">Visit →</a>
                         </div>
-                        <h3 class="text-lg font-semibold text-slate-900 mb-4">${p.title}</h3>
-                        <div class="mb-4">
-                            <div class="text-sm font-medium text-slate-600 mb-1">Price</div>
-                            <div class="text-2xl font-bold ${isBest ? 'text-green-600' : 'text-slate-900'}">
-                                ${p.price !== 'N/A' ? '$' + p.price : 'N/A'}
-                                ${isBest ? '<span class="ml-2 text-xs text-green-600 bg-green-50 px-2 py-1 rounded">BEST</span>' : ''}
+
+                        ${p.retailer ? `<div class="text-sm font-semibold text-purple-700 mb-2">${p.retailer}</div>` : ''}
+
+                        <h3 class="text-base font-semibold text-slate-900 mb-4 line-clamp-2">${p.title}</h3>
+
+                        <div class="mb-3">
+                            <div class="text-xs font-medium text-slate-600 mb-1">Price</div>
+                            <div class="flex items-baseline gap-2">
+                                <div class="text-2xl font-bold ${isBest ? 'text-green-600' : 'text-slate-900'}">
+                                    ${p.price !== 'N/A' ? '$' + p.price : 'N/A'}
+                                </div>
+                                ${isBest ? '<span class="text-xs font-bold text-green-600 bg-green-100 px-2 py-1 rounded">BEST PRICE</span>' : ''}
                             </div>
+                            ${originalPrice && p.rawPrice && p.rawPrice < originalPrice && !isOriginal ? 
+                                `<div class="text-sm text-green-600 font-medium mt-1">Save $${(originalPrice - p.rawPrice).toFixed(2)}</div>` : 
+                                ''
+                            }
                         </div>
-                        ${p.rating ? `<div class="mb-4"><div class="text-sm font-medium text-slate-600 mb-1">Rating</div><div class="text-lg font-semibold">${p.rating} / 5</div></div>` : ''}
-                        <div class="mb-4">
-                            <div class="text-sm font-medium text-slate-600 mb-1">Availability</div>
+
+                        ${p.rating ? `
+                            <div class="mb-3">
+                                <div class="text-xs font-medium text-slate-600 mb-1">Rating</div>
+                                <div class="text-sm font-semibold text-slate-900">${p.rating} / 5</div>
+                            </div>
+                        ` : ''}
+
+                        <div class="mb-3">
+                            <div class="text-xs font-medium text-slate-600 mb-1">Availability</div>
                             <div class="text-sm text-slate-700">${p.availability}</div>
                         </div>
+
+                        ${p.confidence ? `<div class="text-xs text-slate-500 mt-2">Match confidence: ${p.confidence}</div>` : ''}
                     </div>
                 `;
                 grid.innerHTML += card;

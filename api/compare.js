@@ -33,7 +33,24 @@ export default async function handler(req, res) {
         model: 'anthropic/claude-3.5-sonnet',
         messages: [{
           role: 'user',
-          content: `Extract product data from: ${url}. Return JSON only: {"title":"product name","price":"99.99","currency":"USD","rating":"4.5","reviewCount":"100","availability":"in stock","specs":["spec1","spec2"]}`
+          content: `Analyze this product page and extract detailed information: ${url}
+
+Return ONLY valid JSON with this exact structure:
+{
+  "title": "full product name with brand and model",
+  "price": "numeric value only, no currency symbols",
+  "currency": "USD",
+  "rating": "numeric rating or null",
+  "reviewCount": "number of reviews or null",
+  "availability": "in stock / out of stock / limited",
+  "specs": ["key specification 1", "key specification 2"],
+  "brand": "brand name",
+  "model": "model number/name",
+  "category": "product category",
+  "searchTerms": "optimized search query for finding this exact product"
+}
+
+Focus on accuracy. For searchTerms, include brand, model, and key identifiers that would find THIS specific product on other sites.`
         }]
       })
     });
@@ -46,9 +63,21 @@ export default async function handler(req, res) {
     
     return res.status(200).json(productData);
   } catch (error) {
+    console.error('Extraction error:', error);
     return res.status(200).json({
-      url, title: 'Unable to extract', price: 'N/A', rawPrice: null, 
-      currency: 'USD', rating: null, reviewCount: null, availability: 'Unknown', specs: []
+      url,
+      title: 'Unable to extract product data',
+      price: 'N/A',
+      rawPrice: null,
+      currency: 'USD',
+      rating: null,
+      reviewCount: null,
+      availability: 'Unknown',
+      specs: [],
+      brand: null,
+      model: null,
+      category: null,
+      searchTerms: null
     });
   }
 }
