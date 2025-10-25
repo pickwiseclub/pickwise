@@ -3,390 +3,697 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PickWise - Smart Product Comparison</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Compare Products - PickWise | AI Shopping Analysis Tool</title>
+    <meta name="description" content="Compare products from any retailer using AI. Find the best deals automatically. PickWise.club - Product comparison tool, not sports betting.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .demo-banner {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .demo-banner h3 {
+            margin-bottom: 10px;
+        }
+        
+        .demo-btn {
+            background: white;
+            color: #10b981;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .demo-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .mode-selector {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .mode-selector h3 {
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+        
+        .mode-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .mode-btn {
+            flex: 1;
+            min-width: 200px;
+            padding: 15px 20px;
+            border: 2px solid #e5e7eb;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .mode-btn:hover {
+            border-color: #667eea;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+        }
+        
+        .mode-btn.active {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        
+        .mode-btn h4 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .mode-btn p {
+            color: #666;
+            font-size: 13px;
+        }
+        
+        .input-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        .compare-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .compare-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .compare-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .share-section {
+            background: #f0f9ff;
+            border: 2px solid #0ea5e9;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: none;
+        }
+        
+        .share-section.show {
+            display: block;
+        }
+        
+        .share-section h3 {
+            color: #0369a1;
+            margin-bottom: 15px;
+        }
+        
+        .share-link-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .share-link {
+            flex: 1;
+            padding: 12px;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 14px;
+            color: #0369a1;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        
+        .copy-btn {
+            padding: 12px 24px;
+            background: #0ea5e9;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .copy-btn:hover {
+            background: #0284c7;
+        }
+        
+        .copy-btn.copied {
+            background: #10b981;
+        }
+        
+        .results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .ai-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #10b981;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .product-card h3 {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .price {
+            font-size: 32px;
+            font-weight: 700;
+            color: #667eea;
+            margin: 15px 0;
+        }
+        
+        .retailer {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .rating {
+            color: #f59e0b;
+            margin-bottom: 10px;
+        }
+        
+        .savings {
+            background: #dcfce7;
+            color: #16a34a;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            margin: 10px 0;
+            display: inline-block;
+        }
+        
+        .buy-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            text-align: center;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: background 0.2s;
+        }
+        
+        .buy-btn:hover {
+            background: #5568d3;
+        }
+        
+        .error {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        footer {
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            padding: 30px 20px;
+            margin-top: 60px;
+            text-align: center;
+        }
+        
+        footer p {
+            font-size: 13px;
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+    </style>
 </head>
-<body class="bg-slate-50">
-    <div class="max-w-7xl mx-auto p-6">
-        <!-- Header -->
-        <div class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-slate-900 mb-2">PickWise</h1>
-            <p class="text-slate-600">Compare products. Discover better prices. Decide smarter.</p>
-        </div>
-
-        <!-- Mode Selector -->
-        <div class="bg-white rounded-lg shadow-md p-4 mb-6">
-            <div class="flex gap-2 justify-center">
-                <button onclick="switchMode('manual')" id="manualBtn" class="px-6 py-3 rounded-lg font-medium transition-colors bg-blue-600 text-white">
-                    Manual Compare
-                </button>
-                <button onclick="switchMode('ai')" id="aiBtn" class="px-6 py-3 rounded-lg font-medium transition-colors bg-slate-200 text-slate-700 hover:bg-slate-300">
-                    AI Price Finder
-                </button>
-                <button onclick="switchMode('hybrid')" id="hybridBtn" class="px-6 py-3 rounded-lg font-medium transition-colors bg-slate-200 text-slate-700 hover:bg-slate-300">
-                    Hybrid Mode
-                </button>
-            </div>
-        </div>
-
-        <!-- Manual Compare Mode -->
-        <div id="manualMode" class="mode-panel">
-            <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-                <h2 class="text-xl font-semibold text-slate-900 mb-4">Compare Products Side-by-Side</h2>
-                <p class="text-slate-600 text-sm mb-6">Paste 2-3 product URLs to compare prices, ratings, and specs</p>
-                
-                <div class="space-y-4">
-                    <div class="flex items-center gap-3">
-                        <span class="text-sm font-medium text-slate-700 w-24">Product A</span>
-                        <input type="url" id="manualUrl1" placeholder="https://example.com/product" class="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <span class="text-sm font-medium text-slate-700 w-24">Product B</span>
-                        <input type="url" id="manualUrl2" placeholder="https://example.com/product" class="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <span class="text-sm font-medium text-slate-700 w-24">Product C</span>
-                        <input type="url" id="manualUrl3" placeholder="https://example.com/product (optional)" class="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                    </div>
-                </div>
-
-                <button onclick="manualCompare()" id="manualCompareBtn" class="mt-6 w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
-                    Compare Products
-                </button>
-            </div>
-        </div>
-
-        <!-- AI Price Finder Mode -->
-        <div id="aiMode" class="mode-panel hidden">
-            <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-                <h2 class="text-xl font-semibold text-slate-900 mb-4">Find Better Prices Automatically</h2>
-                <p class="text-slate-600 text-sm mb-6">Paste one product URL and AI will search for better prices across major retailers</p>
-                
-                <div class="flex items-center gap-3 mb-6">
-                    <span class="text-sm font-medium text-slate-700 w-24">Product URL</span>
-                    <input type="url" id="aiUrl" placeholder="https://example.com/product" class="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                </div>
-
-                <button onclick="findDeals()" id="findDealsBtn" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-colors">
-                    🤖 Find Better Prices with AI
-                </button>
-            </div>
-        </div>
-
-        <!-- Hybrid Mode -->
-        <div id="hybridMode" class="mode-panel hidden">
-            <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-                <h2 class="text-xl font-semibold text-slate-900 mb-4">Hybrid Comparison</h2>
-                <p class="text-slate-600 text-sm mb-6">Start with your URLs, then let AI find additional options</p>
-                
-                <div class="space-y-4 mb-4">
-                    <div class="flex items-center gap-3">
-                        <span class="text-sm font-medium text-slate-700 w-32">Your Product</span>
-                        <input type="url" id="hybridUrl1" placeholder="https://example.com/product" class="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <span class="text-sm font-medium text-slate-700 w-32">Compare To</span>
-                        <input type="url" id="hybridUrl2" placeholder="https://example.com/product (optional)" class="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                    </div>
-                </div>
-
-                <div class="flex items-center gap-3 mb-6 p-4 bg-purple-50 rounded-lg">
-                    <input type="checkbox" id="hybridAi" checked class="w-5 h-5 text-purple-600">
-                    <label for="hybridAi" class="text-sm font-medium text-slate-700">Let AI find additional options automatically</label>
-                </div>
-
-                <button onclick="hybridCompare()" id="hybridCompareBtn" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-colors">
-                    Compare & Discover
-                </button>
-            </div>
-        </div>
-
-        <!-- Error Display -->
-        <div id="error" class="hidden bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-            <p class="text-red-700 text-sm"></p>
-        </div>
-
-        <!-- Loading State -->
-        <div id="loading" class="hidden bg-white rounded-lg shadow-md p-8 mb-6">
-            <div class="flex flex-col items-center">
-                <div class="animate-spin h-12 w-12 border-4 border-blue-600 border-t-transparent rounded-full mb-4"></div>
-                <p class="text-slate-700 font-medium" id="loadingText">Analyzing products...</p>
-            </div>
-        </div>
-
-        <!-- Results Display -->
-        <div id="results" class="hidden">
-            <!-- Savings Banner -->
-            <div id="savingsBanner" class="hidden bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg shadow-md p-6 mb-6">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h3 class="text-2xl font-bold mb-1">💰 Better Prices Found!</h3>
-                        <p class="text-green-100">Save up to <span id="maxSavings" class="font-bold text-white"></span></p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Products Grid -->
-            <div class="bg-white rounded-lg shadow-md p-6">
-                <h3 class="text-xl font-semibold text-slate-900 mb-6">Comparison Results</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="productsGrid"></div>
-            </div>
-        </div>
+<body>
+    <div class="header">
+        <h1>🎯 PickWise Comparison Tool</h1>
+        <p>Find better prices with AI-powered discovery</p>
     </div>
-
+    
+    <div class="container">
+        <div class="demo-banner">
+            <h3>👋 New to PickWise? Try a Demo!</h3>
+            <p>See how it works with pre-loaded product examples</p>
+            <button class="demo-btn" id="demoBtn">🚀 Launch Demo Comparison</button>
+        </div>
+        
+        <div class="mode-selector">
+            <h3>Choose Your Comparison Mode</h3>
+            <div class="mode-buttons">
+                <div class="mode-btn active" data-mode="manual">
+                    <h4>🔍 Manual Compare</h4>
+                    <p>Compare 2-3 products side-by-side</p>
+                </div>
+                <div class="mode-btn" data-mode="ai">
+                    <h4>🤖 AI Price Finder</h4>
+                    <p>Find better prices automatically</p>
+                </div>
+                <div class="mode-btn" data-mode="hybrid">
+                    <h4>⚡ Hybrid Mode</h4>
+                    <p>Manual + AI discovery combined</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="input-section">
+            <div id="manual-inputs">
+                <div class="input-group">
+                    <label>Product URL 1 *</label>
+                    <input type="url" id="url1" placeholder="https://www.amazon.com/...">
+                </div>
+                <div class="input-group">
+                    <label>Product URL 2</label>
+                    <input type="url" id="url2" placeholder="https://www.walmart.com/...">
+                </div>
+                <div class="input-group">
+                    <label>Product URL 3</label>
+                    <input type="url" id="url3" placeholder="https://www.target.com/...">
+                </div>
+            </div>
+            
+            <div id="ai-option" style="display: none;">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="enableAI">
+                    <label for="enableAI">Let AI find additional pricing options</label>
+                </div>
+            </div>
+            
+            <button class="compare-btn" id="compareBtn">Compare Products</button>
+        </div>
+        
+        <div id="loading" style="display: none;">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Analyzing products and searching for deals...</p>
+            </div>
+        </div>
+        
+        <div id="error" style="display: none;"></div>
+        
+        <div id="shareSection" class="share-section">
+            <h3>📤 Share This Comparison</h3>
+            <p style="margin-bottom: 15px;">Copy this link to share your comparison with others:</p>
+            <div class="share-link-container">
+                <div class="share-link" id="shareLink"></div>
+                <button class="copy-btn" id="copyBtn">Copy Link</button>
+            </div>
+        </div>
+        
+        <div id="results" class="results"></div>
+    </div>
+    
+    <footer>
+        <p>
+            <strong>Disclaimer:</strong> PickWise is an independent comparison tool not endorsed by any retailers. 
+            All information is for educational purposes only. We assume no financial responsibility for purchasing decisions. 
+            Prices may be inaccurate or outdated. Always verify details directly with retailers before purchasing.
+        </p>
+        <p style="font-size: 12px; color: #6b7280; margin-top: 10px;">
+            <strong>Brand Notice:</strong> PickWise.club is a product comparison tool. NOT affiliated with Pickswise.com (sports betting site).
+        </p>
+        <p style="margin-top: 10px;">
+            <a href="/disclaimer.html">Full Disclaimer</a> | 
+            <a href="/faq.html">FAQ</a> | 
+            <a href="/">Home</a> | 
+            AI-generated results provided as-is
+        </p>
+    </footer>
+    
     <script>
         let currentMode = 'manual';
-
-        function switchMode(mode) {
-            currentMode = mode;
-            document.querySelectorAll('.mode-panel').forEach(el => el.classList.add('hidden'));
-            document.getElementById(mode + 'Mode').classList.remove('hidden');
+        let currentResults = [];
+        
+        // Check for shared comparison on load
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const sharedData = urlParams.get('compare');
             
-            // Update button styles
-            ['manual', 'ai', 'hybrid'].forEach(m => {
-                const btn = document.getElementById(m + 'Btn');
-                if (m === mode) {
-                    btn.className = 'px-6 py-3 rounded-lg font-medium transition-colors bg-blue-600 text-white';
-                } else {
-                    btn.className = 'px-6 py-3 rounded-lg font-medium transition-colors bg-slate-200 text-slate-700 hover:bg-slate-300';
+            if (sharedData) {
+                try {
+                    const decoded = JSON.parse(atob(sharedData));
+                    document.getElementById('url1').value = decoded.urls[0] || '';
+                    document.getElementById('url2').value = decoded.urls[1] || '';
+                    document.getElementById('url3').value = decoded.urls[2] || '';
+                    
+                    if (decoded.mode) {
+                        currentMode = decoded.mode;
+                        document.querySelectorAll('.mode-btn').forEach(btn => {
+                            btn.classList.toggle('active', btn.dataset.mode === decoded.mode);
+                        });
+                        updateUI();
+                    }
+                    
+                    // Auto-run comparison
+                    setTimeout(() => {
+                        document.getElementById('compareBtn').click();
+                    }, 500);
+                } catch (e) {
+                    console.error('Invalid share link');
                 }
+            }
+        });
+        
+        // Demo button
+        document.getElementById('demoBtn').addEventListener('click', () => {
+            document.getElementById('url1').value = 'https://www.amazon.com/dp/B08N5WRWNW';
+            document.getElementById('url2').value = 'https://www.walmart.com/ip/Sony-PlayStation-5-Console/363472942';
+            currentMode = 'manual';
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.mode === 'manual');
             });
-
-            hideResults();
-        }
-
-        function showError(msg) {
-            const errorDiv = document.getElementById('error');
-            errorDiv.querySelector('p').innerText = msg;
-            errorDiv.classList.remove('hidden');
-            setTimeout(() => errorDiv.classList.add('hidden'), 5000);
-        }
-
-        function showLoading(text) {
-            document.getElementById('loadingText').innerText = text;
-            document.getElementById('loading').classList.remove('hidden');
-            document.getElementById('results').classList.add('hidden');
-        }
-
-        function hideLoading() {
-            document.getElementById('loading').classList.add('hidden');
-        }
-
-        function hideResults() {
-            document.getElementById('results').classList.add('hidden');
-            document.getElementById('savingsBanner').classList.add('hidden');
-        }
-
-        async function manualCompare() {
-            const url1 = document.getElementById('manualUrl1').value.trim();
-            const url2 = document.getElementById('manualUrl2').value.trim();
-            const url3 = document.getElementById('manualUrl3').value.trim();
-            const urls = [url1, url2, url3].filter(u => u);
-
-            if (urls.length < 2) {
-                showError('Please enter at least 2 product URLs');
-                return;
-            }
-
-            showLoading('Comparing products...');
+            updateUI();
             
-            try {
-                const results = [];
-                for (const url of urls) {
-                    const response = await fetch('/api/compare', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ url })
-                    });
-                    const data = await response.json();
-                    results.push(data);
-                }
-
-                displayResults(results);
-            } catch (err) {
-                showError('Comparison failed. Please try again.');
-            } finally {
-                hideLoading();
+            // Scroll to input section
+            document.querySelector('.input-section').scrollIntoView({ behavior: 'smooth' });
+            
+            // Auto-run after a moment
+            setTimeout(() => {
+                document.getElementById('compareBtn').click();
+            }, 1000);
+        });
+        
+        // Mode selection
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentMode = btn.dataset.mode;
+                updateUI();
+            });
+        });
+        
+        function updateUI() {
+            const manualInputs = document.getElementById('manual-inputs');
+            const aiOption = document.getElementById('ai-option');
+            const url2 = document.getElementById('url2');
+            const url3 = document.getElementById('url3');
+            
+            if (currentMode === 'ai') {
+                url2.parentElement.style.display = 'none';
+                url3.parentElement.style.display = 'none';
+                aiOption.style.display = 'none';
+            } else if (currentMode === 'hybrid') {
+                url2.parentElement.style.display = 'block';
+                url3.parentElement.style.display = 'block';
+                aiOption.style.display = 'block';
+                document.getElementById('enableAI').checked = true;
+            } else {
+                url2.parentElement.style.display = 'block';
+                url3.parentElement.style.display = 'block';
+                aiOption.style.display = 'none';
             }
         }
-
-        async function findDeals() {
-            const url = document.getElementById('aiUrl').value.trim();
-            if (!url) {
-                showError('Please enter a product URL');
-                return;
-            }
-
-            showLoading('Analyzing product and searching for better prices...');
-
-            try {
-                // First, extract product info
-                const compareResponse = await fetch('/api/compare', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ url })
-                });
-                const productInfo = await compareResponse.json();
-
-                // Then find alternative sellers
-                const dealsResponse = await fetch('/api/find-deals', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ productInfo })
-                });
-                const dealsData = await dealsResponse.json();
-
-                // Combine original + alternatives
-                const allProducts = [productInfo, ...dealsData.alternatives.map(alt => ({
-                    title: `${productInfo.title} at ${alt.retailer}`,
-                    url: alt.url,
-                    price: alt.price,
-                    rawPrice: alt.rawPrice,
-                    availability: alt.availability,
-                    retailer: alt.retailer,
-                    confidence: alt.confidence,
-                    isAlternative: true
-                }))];
-
-                displayResults(allProducts, dealsData.savingsAvailable);
-            } catch (err) {
-                console.error(err);
-                showError('Price search failed. Please try again.');
-            } finally {
-                hideLoading();
-            }
-        }
-
-        async function hybridCompare() {
-            const url1 = document.getElementById('hybridUrl1').value.trim();
-            const url2 = document.getElementById('hybridUrl2').value.trim();
-            const useAi = document.getElementById('hybridAi').checked;
-
+        
+        // Copy share link
+        document.getElementById('copyBtn').addEventListener('click', () => {
+            const shareLink = document.getElementById('shareLink').textContent;
+            navigator.clipboard.writeText(shareLink).then(() => {
+                const btn = document.getElementById('copyBtn');
+                btn.textContent = '✓ Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = 'Copy Link';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        });
+        
+        // Compare button
+        document.getElementById('compareBtn').addEventListener('click', async () => {
+            const url1 = document.getElementById('url1').value.trim();
+            const url2 = document.getElementById('url2').value.trim();
+            const url3 = document.getElementById('url3').value.trim();
+            const enableAI = document.getElementById('enableAI').checked;
+            
             if (!url1) {
                 showError('Please enter at least one product URL');
                 return;
             }
-
-            showLoading('Comparing products and discovering deals...');
-
+            
+            const urls = [url1, url2, url3].filter(url => url);
+            
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('error').style.display = 'none';
+            document.getElementById('results').innerHTML = '';
+            document.getElementById('shareSection').classList.remove('show');
+            document.getElementById('compareBtn').disabled = true;
+            
             try {
-                const results = [];
+                // Step 1: Extract product data
+                const compareResponse = await fetch('/api/compare', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ urls })
+                });
                 
-                // Get user-provided URLs
-                for (const url of [url1, url2].filter(u => u)) {
-                    const response = await fetch('/api/compare', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ url })
-                    });
-                    const data = await response.json();
-                    results.push(data);
+                const compareData = await compareResponse.json();
+                
+                if (!compareResponse.ok) {
+                    throw new Error(compareData.error || 'Failed to extract product data');
                 }
-
-                // If AI enabled, find alternatives for first product
-                if (useAi && results[0] && results[0].searchTerms) {
+                
+                let allProducts = compareData.products || [];
+                
+                // Step 2: If AI mode or hybrid with AI enabled, find additional deals
+                if ((currentMode === 'ai' || (currentMode === 'hybrid' && enableAI)) && allProducts.length > 0) {
+                    const firstProduct = allProducts[0];
+                    
                     const dealsResponse = await fetch('/api/find-deals', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ productInfo: results[0] })
+                        body: JSON.stringify({
+                            productName: firstProduct.name,
+                            searchTerms: firstProduct.searchTerms || firstProduct.name
+                        })
                     });
+                    
                     const dealsData = await dealsResponse.json();
-
-                    // Add top 2 alternatives
-                    const topAlternatives = dealsData.alternatives.slice(0, 2).map(alt => ({
-                        title: `${results[0].title} at ${alt.retailer}`,
-                        url: alt.url,
-                        price: alt.price,
-                        rawPrice: alt.rawPrice,
-                        availability: alt.availability,
-                        retailer: alt.retailer,
-                        isAlternative: true
-                    }));
-
-                    results.push(...topAlternatives);
+                    
+                    if (dealsResponse.ok && dealsData.alternatives) {
+                        // Add AI-found products
+                        const aiProducts = dealsData.alternatives.map(alt => ({
+                            ...alt,
+                            isAIFound: true
+                        }));
+                        allProducts = [...allProducts, ...aiProducts];
+                    }
                 }
-
-                displayResults(results);
-            } catch (err) {
-                console.error(err);
-                showError('Hybrid comparison failed. Please try again.');
-            } finally {
-                hideLoading();
-            }
-        }
-
-        function displayResults(products, showSavings = false) {
-            const bestPrice = Math.min(...products.filter(p => p.rawPrice).map(p => p.rawPrice));
-            const originalPrice = products[0]?.rawPrice;
-            
-            if (showSavings && originalPrice && bestPrice < originalPrice) {
-                const savings = (originalPrice - bestPrice).toFixed(2);
-                const savingsPercent = ((savings / originalPrice) * 100).toFixed(0);
-                document.getElementById('maxSavings').innerText = `$${savings} (${savingsPercent}%)`;
-                document.getElementById('savingsBanner').classList.remove('hidden');
-            }
-
-            const grid = document.getElementById('productsGrid');
-            grid.innerHTML = '';
-
-            products.forEach((p, i) => {
-                const isBest = p.rawPrice === bestPrice && bestPrice;
-                const isOriginal = i === 0;
                 
-                const card = `
-                    <div class="border-2 rounded-lg p-5 transition-all hover:shadow-lg ${
-                        isBest ? 'border-green-500 bg-green-50' : 
-                        p.error ? 'border-red-300 bg-red-50' : 
-                        'border-slate-200'
-                    }">
-                        <div class="flex items-center justify-between mb-3">
-                            ${isOriginal ? 
-                                '<span class="text-xs font-bold text-blue-600 bg-blue-100 px-3 py-1 rounded-full">ORIGINAL</span>' :
-                                p.isAlternative ?
-                                '<span class="text-xs font-bold text-purple-600 bg-purple-100 px-3 py-1 rounded-full">AI FOUND</span>' :
-                                '<span class="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-full">PRODUCT ${String.fromCharCode(65 + i)}</span>'
-                            }
-                            <a href="${p.url}" target="_blank" class="text-blue-600 hover:text-blue-700 text-sm font-medium">Visit →</a>
-                        </div>
-
-                        ${p.retailer ? `<div class="text-sm font-semibold text-purple-700 mb-2">${p.retailer}</div>` : ''}
-
-                        <h3 class="text-base font-semibold text-slate-900 mb-4 line-clamp-2">${p.title}</h3>
-
-                        <div class="mb-3">
-                            <div class="text-xs font-medium text-slate-600 mb-1">Price</div>
-                            <div class="flex items-baseline gap-2">
-                                <div class="text-2xl font-bold ${isBest ? 'text-green-600' : 'text-slate-900'}">
-                                    ${p.price !== 'N/A' ? '$' + p.price : 'N/A'}
-                                </div>
-                                ${isBest ? '<span class="text-xs font-bold text-green-600 bg-green-100 px-2 py-1 rounded">BEST PRICE</span>' : ''}
-                            </div>
-                            ${originalPrice && p.rawPrice && p.rawPrice < originalPrice && !isOriginal ? 
-                                `<div class="text-sm text-green-600 font-medium mt-1">Save $${(originalPrice - p.rawPrice).toFixed(2)}</div>` : 
-                                ''
-                            }
-                        </div>
-
-                        ${p.rating ? `
-                            <div class="mb-3">
-                                <div class="text-xs font-medium text-slate-600 mb-1">Rating</div>
-                                <div class="text-sm font-semibold text-slate-900">${p.rating} / 5</div>
-                            </div>
-                        ` : ''}
-
-                        <div class="mb-3">
-                            <div class="text-xs font-medium text-slate-600 mb-1">Availability</div>
-                            <div class="text-sm text-slate-700">${p.availability}</div>
-                        </div>
-
-                        ${p.confidence ? `<div class="text-xs text-slate-500 mt-2">Match confidence: ${p.confidence}</div>` : ''}
-                    </div>
-                `;
-                grid.innerHTML += card;
-            });
-
-            document.getElementById('results').classList.remove('hidden');
+                currentResults = allProducts;
+                displayResults(allProducts);
+                generateShareLink(urls);
+                
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('compareBtn').disabled = false;
+            }
+        });
+        
+        function generateShareLink(urls) {
+            const shareData = {
+                urls: urls,
+                mode: currentMode
+            };
+            const encoded = btoa(JSON.stringify(shareData));
+            const shareUrl = `${window.location.origin}${window.location.pathname}?compare=${encoded}`;
+            
+            document.getElementById('shareLink').textContent = shareUrl;
+            document.getElementById('shareSection').classList.add('show');
         }
+        
+        function displayResults(products) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+            
+            if (products.length === 0) {
+                showError('No products found. Please check your URLs and try again.');
+                return;
+            }
+            
+            // Find lowest price for savings calculation
+            const prices = products.map(p => parseFloat(p.price?.replace(/[^0-9.]/g, '')) || 999999);
+            const lowestPrice = Math.min(...prices);
+            
+            products.forEach((product, index) => {
+                const price = parseFloat(product.price?.replace(/[^0-9.]/g, '')) || 0;
+                const savings = price > lowestPrice ? ((price - lowestPrice) / price * 100).toFixed(0) : 0;
+                
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    ${product.isAIFound ? '<div class="ai-badge">🤖 AI Found</div>' : ''}
+                    <h3>${product.name || 'Product ' + (index + 1)}</h3>
+                    <div class="price">${product.price || 'N/A'}</div>
+                    <div class="retailer">Sold by: ${product.retailer || 'Unknown'}</div>
+                    ${product.rating ? `<div class="rating">⭐ ${product.rating}</div>` : ''}
+                    ${product.inStock !== false ? '<div style="color: #10b981;">✓ In Stock</div>' : '<div style="color: #dc2626;">✗ Out of Stock</div>'}
+                    ${savings > 0 && price !== lowestPrice ? `<div class="savings">Could save ${savings}% elsewhere</div>` : ''}
+                    ${price === lowestPrice && prices.filter(p => p === lowestPrice).length === 1 ? '<div class="savings">✓ Best Price!</div>' : ''}
+                    <a href="${product.url}" target="_blank" class="buy-btn">View Product →</a>
+                `;
+                resultsDiv.appendChild(card);
+            });
+            
+            // Scroll to results
+            resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.className = 'error';
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+        
+        // Initialize UI
+        updateUI();
     </script>
 </body>
 </html>
