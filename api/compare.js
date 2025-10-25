@@ -41,21 +41,15 @@ export default async function handler(req, res) {
                         'X-Title': 'PickWise Product Extractor'
                     },
                     body: JSON.stringify({
-                        model: 'meta-llama/llama-3.1-8b-instruct:free',
+                        model: 'google/gemini-flash-1.5-8b:free',
                         messages: [{
                             role: 'user',
-                            content: `Extract product information from this URL: ${url}
+                            content: `Extract product information from this URL and respond with ONLY valid JSON, no other text:
 
-Return ONLY a JSON object, no other text. Format:
-{
-  "name": "product name",
-  "price": "$XX.XX",
-  "retailer": "retailer name",
-  "searchTerms": "keywords",
-  "url": "${url}"
-}
+URL: ${url}
 
-CRITICAL: Respond with ONLY the JSON object above, nothing else.`
+Response format (ONLY this JSON, nothing else):
+{"name":"product name","price":"$XX.XX","retailer":"retailer name","searchTerms":"keywords","url":"${url}"}`
                         }]
                     })
                 });
@@ -66,35 +60,36 @@ CRITICAL: Respond with ONLY the JSON object above, nothing else.`
                     try {
                         let content = data.choices[0].message.content.trim();
                         
-                        // Remove markdown code blocks if present
-                        content = content.replace(/```json\n?/gi, '').replace(/```\n?/g, '');
+                        // Remove any markdown, code blocks, or extra text
+                        content = content.replace(/```json/gi, '').replace(/```/g, '').trim();
                         
-                        // Remove any text before the first { and after the last }
-                        const startIndex = content.indexOf('{');
-                        const endIndex = content.lastIndexOf('}');
+                        // Find JSON object
+                        let startIdx = content.indexOf('{');
+                        let endIdx = content.lastIndexOf('}');
                         
-                        if (startIndex !== -1 && endIndex !== -1) {
-                            content = content.substring(startIndex, endIndex + 1);
+                        if (startIdx !== -1 && endIdx !== -1) {
+                            const jsonStr = content.substring(startIdx, endIdx + 1);
+                            const productData = JSON.parse(jsonStr);
                             
-                            const productData = JSON.parse(content);
                             products.push({
                                 name: productData.name || 'Unknown Product',
                                 price: productData.price || 'N/A',
                                 retailer: productData.retailer || extractRetailer(url),
-                                searchTerms: productData.searchTerms || productData.name,
+                                searchTerms: productData.searchTerms || productData.name || extractRetailer(url),
                                 url: url,
                                 rating: null,
                                 inStock: true
                             });
                         } else {
-                            // Fallback if can't find JSON
+                            console.error('No JSON found in response');
                             products.push(createFallbackProduct(url));
                         }
                     } catch (parseError) {
-                        console.error('JSON parse error:', parseError);
+                        console.error('JSON parse error:', parseError, 'Content:', data.choices[0].message.content);
                         products.push(createFallbackProduct(url));
                     }
                 } else {
+                    console.error('No AI response');
                     products.push(createFallbackProduct(url));
                 }
                 

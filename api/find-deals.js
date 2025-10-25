@@ -35,30 +35,13 @@ export default async function handler(req, res) {
                 'X-Title': 'PickWise Deal Finder'
             },
             body: JSON.stringify({
-                model: 'meta-llama/llama-3.1-8b-instruct:free',
+                model: 'google/gemini-flash-1.5-8b:free',
                 messages: [{
                     role: 'user',
-                    content: `Find 2-3 retailers for: "${productName || searchTerms}"
+                    content: `Find 2-3 major retailers that sell: "${productName || searchTerms}"
 
-Return ONLY a JSON array, no other text. Format:
-[
-  {
-    "name": "product name",
-    "price": "$XX.XX",
-    "retailer": "Amazon",
-    "url": "https://www.amazon.com/s?k=product",
-    "inStock": true
-  },
-  {
-    "name": "product name",
-    "price": "$XX.XX",
-    "retailer": "Walmart",
-    "url": "https://www.walmart.com/search?q=product",
-    "inStock": true
-  }
-]
-
-CRITICAL: Respond with ONLY the JSON array above, nothing else. Use realistic price estimates.`
+Respond with ONLY valid JSON array, no other text:
+[{"name":"product name","price":"$XX.XX","retailer":"Amazon","url":"https://www.amazon.com/s?k=product","inStock":true},{"name":"product name","price":"$XX.XX","retailer":"Walmart","url":"https://www.walmart.com/search?q=product","inStock":true}]`
                 }]
             })
         });
@@ -69,22 +52,21 @@ CRITICAL: Respond with ONLY the JSON array above, nothing else. Use realistic pr
             try {
                 let content = data.choices[0].message.content.trim();
                 
-                // Remove markdown code blocks if present
-                content = content.replace(/```json\n?/gi, '').replace(/```\n?/g, '');
+                // Remove markdown and extra text
+                content = content.replace(/```json/gi, '').replace(/```/g, '').trim();
                 
-                // Remove any text before the first [ and after the last ]
-                const startIndex = content.indexOf('[');
-                const endIndex = content.lastIndexOf(']');
+                // Find JSON array
+                let startIdx = content.indexOf('[');
+                let endIdx = content.lastIndexOf(']');
                 
-                if (startIndex !== -1 && endIndex !== -1) {
-                    content = content.substring(startIndex, endIndex + 1);
+                if (startIdx !== -1 && endIdx !== -1) {
+                    const jsonStr = content.substring(startIdx, endIdx + 1);
+                    const alternatives = JSON.parse(jsonStr);
                     
-                    const alternatives = JSON.parse(content);
-                    
-                    // Validate and clean up the alternatives
+                    // Validate and clean up
                     const cleanedAlternatives = alternatives.map(alt => ({
                         name: alt.name || productName || 'Alternative Product',
-                        price: alt.price || 'Check retailer for price',
+                        price: alt.price || 'Check retailer',
                         retailer: alt.retailer || 'Retailer',
                         url: alt.url || '#',
                         inStock: alt.inStock !== false,
@@ -96,7 +78,6 @@ CRITICAL: Respond with ONLY the JSON array above, nothing else. Use realistic pr
                         searchTerms: searchTerms || productName
                     });
                 } else {
-                    // Return generic alternatives as fallback
                     return res.status(200).json({
                         alternatives: createGenericAlternatives(productName || searchTerms)
                     });
